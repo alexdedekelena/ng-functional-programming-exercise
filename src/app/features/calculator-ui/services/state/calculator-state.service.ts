@@ -1,12 +1,33 @@
-import { computed, Injectable, signal } from '@angular/core';
+import { computed, effect, Injectable, signal } from '@angular/core';
 import { evaluate } from '@suprnation/evaluator';
 import { CalculatorState } from './calculator-state.interface';
+import { MessageService } from 'primeng/api';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CalculatorStateService {
-  constructor() {}
+  constructor(private messageService: MessageService) {
+    // Error Message
+    effect(() => {
+      if (this.errorMessage()) {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: this.errorMessage(),
+        });
+        this.setErrorMessage('');
+      }
+
+      if (this.successMessage()) {
+         this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: this.successMessage(),
+        });
+      }
+    });
+  }
 
   // Signal that holds the state (initial state)
   private readonly initialState = {
@@ -53,15 +74,26 @@ export class CalculatorStateService {
   }
 
   // Actions
+
+  /** Evaluates the current expression, creates a new history item and add it to the history array.
+   * Validates that only latest 5 results are displayed
+   * If error ocurrs on evaluation set proper error message
+   */
   addExpressionResultToHistory() {
     const evaluationResult = evaluate(this.expression());
+    const historyItem = { ...evaluationResult, expression: this.expression() };
+
+    if (this.history().length >= 5) {
+      this.history().pop();
+    }
 
     this.state.update((state) => ({
       ...state,
-      history: [
-        ...state.history,
-        { ...evaluationResult, expression: this.expression() },
-      ],
+      errorMessage: !evaluationResult.success ? evaluationResult.reason : '',
+      successMessage: evaluationResult.success
+        ? `Value: ${evaluationResult.value}`
+        : '',
+      history: [historyItem, ...state.history],
     }));
   }
 
