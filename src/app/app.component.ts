@@ -1,3 +1,4 @@
+import { MapReduceServiceService } from './services/map-reduce-service.service';
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
@@ -8,5 +9,7 @@ import { RouterOutlet } from '@angular/router';
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'ng-functional-programming-exercise';
+  constructor(private readonly mapReduceServiceService: MapReduceServiceService) {
+    this.mapReduceServiceService.logTestFunction();
+  }
 }
