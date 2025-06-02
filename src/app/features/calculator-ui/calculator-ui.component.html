@@ -1,0 +1,76 @@
+<div class="surface-0 min-h-screen flex flex-column">
+  <div
+    class="flex align-items-center justify-content-center min-h-full relative z-1 pt-6"
+  >
+    <div class="surface-card p-4 shadow-2 border-round w-full lg:w-6">
+      <form [formGroup]="calculatorForm" (ngSubmit)="submitEvaluation()">
+        <div class="grid">
+          <div class="col-12 md:col-6">
+            <div class="mb-3">
+              <label for="expression" class="block mb-2"
+                >Enter Expression</label
+              >
+              <input
+                id="expression"
+                type="text"
+                pInputText
+                formControlName="expression"
+                required
+                minlength="2"
+                class="w-full"
+                placeholder="1+2+sin(24+cos(23))"
+              />
+              @if ( calculatorForm.get("expression")?.invalid &&
+              !calculatorForm.get("expression")?.pristine ||
+              !isExpressionValid() ) {
+              <small
+                id="firstname-help"
+                class="text-red-500"
+                data-cy="first-name-help"
+                >Invalid Expression</small
+              >
+              }
+            </div>
+          </div>
+          <div class="col-12">
+            <p-button
+              label="Evaluate!"
+              type="submit"
+              [disabled]="!calculatorForm.valid"
+            ></p-button>
+          </div>
+        </div>
+      </form>
+
+      <div class="grid">
+        <div class="col-12 pb-6 mb-4 border-bottom-1 border-gray-300">
+          <h1>Evaluate History</h1>
+          <p-table
+            [value]="history()"
+            responsiveLayout="scroll"
+            data-cy="countries-table"
+          >
+            <ng-template pTemplate="header">
+              <tr>
+                <th>Expression</th>
+                <th>Result</th>
+                <th>Success</th>
+                <th>Rest</th>
+                <th>Reason</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-result>
+              <tr>
+                <td>{{ result.expression }}</td>
+                <td>{{ result.value }}</td>
+                <td>{{ result.success }}</td>
+                <td>{{ result.rest }}</td>
+                <td>{{ result.reason }}</td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
