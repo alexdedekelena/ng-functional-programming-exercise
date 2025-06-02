@@ -1,4 +1,4 @@
-import { MapReduceServiceService } from './services/map-reduce-service.service';
+import { MapReduceService } from './services/map-reduce-service.service';
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
@@ -9,7 +9,7 @@ import { RouterOutlet } from '@angular/router';
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  constructor(private readonly mapReduceServiceService: MapReduceServiceService) {
-    this.mapReduceServiceService.logTestFunction();
+  constructor(private readonly mapReduceService: MapReduceService) {
+    this.mapReduceService.logTestFunction();
   }
 }

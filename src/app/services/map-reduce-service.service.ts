@@ -186,7 +186,7 @@ const sumCubes3 = sumMap2((x) => x * x * x);
 @Injectable({
   providedIn: 'root',
 })
-export class MapReduceServiceService {
+export class MapReduceService {
   constructor() {}
 
   logTestFunction(): void {
